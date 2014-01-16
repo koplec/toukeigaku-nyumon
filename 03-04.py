@@ -6,30 +6,83 @@
 # 以上の統計手法をブートストラップと呼ぶ
 
 import random
+import math
+import numpy as np
 
 ##(1)の手続き
 def rand11():
     return random.randint(1,11)
 
 ##11回繰り返す
-data = []
+data11 = []
 for i in range(11):
     a = rand11()
-    data.append(a)
-
-print("生成した乱数は以下の通り")
-print(data)
+    data11.append(a)
+data11 = np.array(data11)
+print("生成した11個の乱数は以下の通り")
+print(data11)
 
 ##表3.1のデータ
 # x:男兄弟の身長（インチ）
 # y:女兄弟の身長（インチ）
 table = {
-    "x":[71,68,66,67,70,71,70,73,72,65,66], 
-    "y":[69,64,65,63,65,62,65,64,66,59,62]
+    "x":np.array([71,68,66,67,70,71,70,73,72,65,66]), 
+    "y":np.array([69,64,65,63,65,62,65,64,66,59,62])
 }
 print("表3.1のデータ")
 print(table)
 
 ##11個のランダムな番号から相関係数を計算する
 ## 相関係数は、r_xy = \sum(x_i-\bar(x))(y_i-\bar(y))/n / \sqrt(\sum(x_i-\bar(x))^2/n) \sqrt(\sum(x_i-\bar(x))^2/n)
-## 分散から求める
+## 平均と分散の計算手続きを書く
+# 平均
+def avg(lst):
+    total = sum(lst)
+    return total / len(lst)
+
+# 分散
+def div(x_lst, y_lst):
+    x_av = avg(x_lst)
+    y_av = avg(y_lst)
+    return sum(list(map(lambda x, y: (x-x_av)*(y-y_av), x_lst, y_lst))) / len(x_lst)
+
+#相関係数
+def corr(x_lst, y_lst):
+    xy_div = div(x_lst, y_lst)
+    x_div = div(x_lst,x_lst)
+    y_div = div(y_lst, y_lst)
+    return xy_div/(math.sqrt(x_div)*math.sqrt(y_div))
+
+x_avg = avg(table["x"])
+print("xの平均値は、", x_avg)
+y_avg = avg(table["y"])
+print("yの平均値は、", y_avg)
+
+x_div = div(table["x"], table["x"])
+y_div = div(table["y"], table["y"])
+xy_div = div(table["x"], table["y"])
+
+print("表3.1から純粋に求めた相関係数は、", xy_div/(math.sqrt(x_div)*math.sqrt(y_div)))
+print(" 相関係数の関数から求めると、", corr(table["x"], table["y"]))
+
+
+print("(2)11個の乱数から求めた相関係数を計算する")
+print("まず、データを抜き出す")
+print("乱数は",data11)
+
+x_11 = []
+y_11 = []
+
+for r in data11:
+    x = table["x"][r-1]
+    y = table["y"][r-1]
+    x_11.append(x)
+    y_11.append(y)
+
+x_11 = np.array(x_11)
+y_11 = np.array(y_11)
+print("x_11=",x_11)
+print("y_11=",y_11)
+print("これらから相関係数を求めると、", corr(x_11, y_11))
+
+print("(3)data11を200個作って、相関係数を200個作成してヒストグラムを作る")
