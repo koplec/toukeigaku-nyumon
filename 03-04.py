@@ -11,14 +11,15 @@ import numpy as np
 
 ##(1)の手続き
 def rand11():
-    return random.randint(1,11)
+    data11 = []
+    for i in range(11):
+        a = random.randint(1,11)
+        data11.append(a)
+    
+    return np.array(data11)
 
 ##11回繰り返す
-data11 = []
-for i in range(11):
-    a = rand11()
-    data11.append(a)
-data11 = np.array(data11)
+data11 = rand11()
 print("生成した11個の乱数は以下の通り")
 print(data11)
 
@@ -78,7 +79,7 @@ for r in data11:
     y = table["y"][r-1]
     x_11.append(x)
     y_11.append(y)
-
+        
 x_11 = np.array(x_11)
 y_11 = np.array(y_11)
 print("x_11=",x_11)
@@ -86,3 +87,29 @@ print("y_11=",y_11)
 print("これらから相関係数を求めると、", corr(x_11, y_11))
 
 print("(3)data11を200個作って、相関係数を200個作成してヒストグラムを作る")
+#(2)の結果から、乱数を与えた時に相関係数を計算する関数を作る
+def calcCorr(data11):
+    x_11 = []
+    y_11 = []
+
+    for r in data11:
+        x = table["x"][r-1]
+        y = table["y"][r-1]
+        x_11.append(x)
+        y_11.append(y)
+        
+    x_11 = np.array(x_11)
+    y_11 = np.array(y_11)
+    return corr(x_11, y_11)
+
+#11個の乱数を作る手続きはすでに作成したので
+corrs = []
+for count in range(200):
+    data11 = rand11()
+    r = calcCorr(data11)
+    corrs.append(r)
+    print("r_", count, " = ", r)
+
+    
+corrs = np.array(corrs)
+
