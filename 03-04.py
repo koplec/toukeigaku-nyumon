@@ -5,9 +5,14 @@
 # (3) (2)を200回繰り返し、相関係数の値r1,r2,...,r200を得たのち、そのヒストグラムを作れ。
 # 以上の統計手法をブートストラップと呼ぶ
 
+#
+# python3.3.3 (windows7-32bit)で動作させた
+#
+
 import random
 import math
 import numpy as np
+import pylab as pl
 
 ##(1)の手続き
 def rand11():
@@ -113,3 +118,9 @@ for count in range(200):
     
 corrs = np.array(corrs)
 
+##ヒストグラムを作る
+# bins:棒の数
+# range:描画範囲　-1~1になるはず
+# normed=True 標準化? 聞いていないかも
+pl.hist(corrs, bins=30,range=(-1,1), normed=1)
+pl.show()
