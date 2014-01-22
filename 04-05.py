@@ -31,3 +31,6 @@ pl.xlabel("number")
 pl.ylabel("prob")
 pl.title("04-05")
 pl.show()
+
+#プロットしてみると、15組のところあたりにピーク
+# よく考えたら、2項定理
